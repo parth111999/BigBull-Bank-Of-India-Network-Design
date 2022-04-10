@@ -1,0 +1,105 @@
+!
+hostname Gateway-Router1
+!
+!
+!
+!
+!
+!
+!
+!
+no ip cef
+no ipv6 cef
+!
+!
+!
+!
+crypto isakmp policy 10
+ encr aes
+ authentication pre-share
+ group 2
+!
+crypto isakmp key ps123 address 200.200.200.1
+!
+!
+!
+crypto ipsec transform-set VPN-SET esp-3des esp-sha-hmac
+!
+crypto map VPM-MAP 10 ipsec-isakmp 
+ set peer 200.200.200.1
+ set transform-set VPN-SET 
+ match address 110
+!
+!
+crypto map VPN-MAP 10 ipsec-isakmp 
+ set peer 200.200.200.1
+ set transform-set VPN-SET 
+ match address 110
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0/0
+ ip address 192.168.101.2 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/0/1
+ ip address 192.168.104.2 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface Serial0/1/0
+ ip address 100.100.100.1 255.255.255.252
+ crypto map VPN-MAP
+!
+interface Serial0/1/1
+ no ip address
+ clock rate 2000000
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ log-adjacency-changes
+ network 192.168.101.0 0.0.0.3 area 0
+ network 192.168.104.0 0.0.0.3 area 0
+!
+ip classless
+ip route 192.168.21.0 255.255.255.0 100.100.100.2 
+ip route 200.200.200.0 255.255.255.252 100.100.100.2 
+ip route 192.168.22.0 255.255.255.252 100.100.100.2 
+!
+ip flow-export version 9
+!
+!
+access-list 110 permit ip 192.168.10.0 0.0.0.15 192.168.21.0 0.0.0.255
+access-list 110 permit ip 192.168.11.0 0.0.0.15 192.168.21.0 0.0.0.255
+access-list 110 permit ip 192.168.12.0 0.0.0.15 192.168.21.0 0.0.0.255
+!
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+end

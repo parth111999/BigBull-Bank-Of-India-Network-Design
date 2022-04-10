@@ -1,0 +1,26 @@
+Key Feature 
+	- Site-2-Site VPN (gateway Router & HQ Router)
+	-server static IP
+	- SMTP
+	- FTP
+	- DNS
+	- HTTP
+	- Edge Module(Gateway Router)
+	- Redundancy 
+	- Multi-Switching
+	- Subnetting
+	- VLAN
+	- PAT
+	
+- 
+- Redundancy Demo
+	interface GigabitEthernet 1/0/1
+	interface GigabitEthernet 1/0/1 1/0/2
+	shut 
+
+- Site-2-Site VPN Demo
+	sh crypto ipsec sa
+	sh crypto isakmp sa
+
+- PAT ( Port Address Translation - Mul device on LAN mapped to single IP to conserve IP address)
+	sh ip nat translation
